@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import eus.ehu.tta.appbasica.modelo.User;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,6 +21,10 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this,MenuActivity.class);
         String login = ((EditText)findViewById(R.id.login)).getText().toString();
         String passwd = ((EditText)findViewById(R.id.passwd)).getText().toString();
-        startActivity(intent);
+        if(User.autenticathion(login, passwd)){
+            intent.putExtra(MenuActivity.EXTRA_LOGIN,login);
+            startActivity(intent);
+        }
+
     }
 }

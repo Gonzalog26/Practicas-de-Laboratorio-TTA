@@ -8,6 +8,29 @@
 
     tools:context="eus.ehu.tta.appbasica.MenuActivity">
 
+    <TextView
+        android:id="@+id/menu_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="20dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nuevo Test"
+        android:onClick="test"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nuevo ejercicio"
+        android:onClick="ejercicio"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Seguimiento"/>
 
 
 </LinearLayout>
