@@ -6,11 +6,11 @@ import eus.ehu.tta.appbasica.modelo.Test;
  * Created by tta on 27/12/17.
  */
 
-public class data {
+public class Data {
 
     Test test;
 
-    public data(){
+    public Data(){
         test = new Test();
     }
 
