@@ -16,4 +16,11 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="bienvenido">Bienvenido: </string>
+    <string name="leccion1">Leccion 1: Introducción</string>
+    <string name="ejercicio1">Explica cómo aplicarías el patrón de diseño MVP en el desarrollo de una app para Android</string>
+    <string name="enviarFichero">Enviar fichero</string>
+    <string name="sacarFoto">Sacar foto</string>
+    <string name="grabarAudio">Grabar audio</string>
+    <string name="grabarVideo">Grabar video</string>
 </resources>

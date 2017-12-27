@@ -1,9 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="eus.ehu.tta.appbasica.EjercicioActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/enunciado_ejercicio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/boton_enviarFichero"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/enviarFichero"
+        android:onClick="enviarFichero"/>
+
+    <Button
+        android:id="@+id/boton_sacarFoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sacarFoto"
+        android:onClick="enviarFichero"/>
+
+    <Button
+        android:id="@+id/boton_grabarAudio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/grabarAudio"
+        android:onClick="enviarFichero"/>
+
+    <Button
+        android:id="@+id/boton_grabarVideo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/grabarVideo"
+        android:onClick="enviarFichero"/>
+
+
+</LinearLayout>
