@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import static eus.ehu.tta.appbasica.R.*;
+
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -14,14 +16,13 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        setContentView(layout.activity_menu);
 
         Intent intent = getIntent();
-        TextView textLogin = (TextView) findViewById(R.id.menu_login);
-        String text = R.string.bienvenido+intent.getStringExtra(EXTRA_LOGIN);
-        textLogin.setText(text);
-        textLogin = (TextView)findViewById(R.id.leccion);
-        textLogin.setText(R.string.leccion1);
+        TextView textLogin = (TextView) findViewById(id.menu_login);
+        textLogin.setText(string.bienvenido);
+        textLogin = (TextView)findViewById(id.leccion);
+        textLogin.setText(string.leccion1);
     }
 
     public void test (View view){
