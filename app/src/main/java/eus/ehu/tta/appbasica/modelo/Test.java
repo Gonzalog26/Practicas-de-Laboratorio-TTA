@@ -1,6 +1,7 @@
 package eus.ehu.tta.appbasica.modelo;
 
 import java.lang.reflect.Array;
+import java.util.List;
 
 import eus.ehu.tta.appbasica.R;
 
@@ -10,28 +11,47 @@ import eus.ehu.tta.appbasica.R;
 
 public class Test {
 
-    public static String enunciado;
-    public static String[] botones;
+    public String pregunta;
+    public List<String> respuestas;
+    public int respuestaCorrecta;
+    public String ayuda;
 
     public Test(){
-            //DUDA
-            enunciado = "¿Cual de las siguientes opciones no se indica en el fichero de manifiesto de la app?";
-            botones = new String[5];
-            botones[1]="Version de la aplicación";
-            botones[2]="Listado de componentes de la aplicación";
-            botones[3]="Opciones del menú de ajustes";
-            botones[4]="Nivel mínimo de la API android requerida";
-            botones[5]="Nombre del paquete java de la aplicación";
-    }
-
-    public String getEnunciado(){
-        return enunciado;
-    }
-
-    public String[] getBotones(){
-        return botones;
+          this.pregunta = null;
+          this.ayuda = null;
+          this.respuestas = null;
     }
 
 
+    public String getPregunta() {
+        return pregunta;
+    }
 
+    public void setPregunta(String pregunta) {
+        this.pregunta = pregunta;
+    }
+
+    public List<String> getRespuestas() {
+        return respuestas;
+    }
+
+    public void setRespuestas(List<String> respuestas) {
+        this.respuestas = respuestas;
+    }
+
+    public int getRespuestaCorrecta() {
+        return respuestaCorrecta;
+    }
+
+    public void setRespuestaCorrecta(int respuestaCorrecta) {
+        this.respuestaCorrecta = respuestaCorrecta;
+    }
+
+    public String getAyuda() {
+        return ayuda;
+    }
+
+    public void setAyuda(String ayuda) {
+        this.ayuda = ayuda;
+    }
 }
