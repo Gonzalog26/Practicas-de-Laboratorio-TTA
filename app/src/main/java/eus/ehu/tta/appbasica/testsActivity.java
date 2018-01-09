@@ -1,6 +1,8 @@
 package eus.ehu.tta.appbasica;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Layout;
@@ -20,6 +22,7 @@ public class testsActivity extends AppCompatActivity implements View.OnClickList
 
 
     int respuestaCorrecta;
+    String tipoMime;
     String ayuda;
 
     @Override
@@ -35,6 +38,7 @@ public class testsActivity extends AppCompatActivity implements View.OnClickList
 
         respuestaCorrecta = test.getRespuestaCorrecta();
         ayuda = test.getAyuda();
+        tipoMime = test.getTipoMIME();
 
         RadioGroup group = (RadioGroup) findViewById(R.id.elecciones_test);
         int i=0;
@@ -70,12 +74,35 @@ public class testsActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void verAyuda(View view){
-        WebView web = new WebView(this);
-        web.loadData(ayuda,"text/html",null);
-        web.setBackgroundColor(Color.TRANSPARENT);
-        web.setLayerType(WebView.LAYER_TYPE_SOFTWARE,null);
-        LinearLayout layout = findViewById(R.id.layout_tests);
-        layout.addView(web);
+
+        if(tipoMime=="null"){
+            WebView web = new WebView(this);
+            web.loadData(ayuda,"text/html",null);
+            web.setBackgroundColor(Color.TRANSPARENT);
+            web.setLayerType(WebView.LAYER_TYPE_SOFTWARE,null);
+            LinearLayout layout = findViewById(R.id.layout_tests);
+            layout.addView(web);
+        }
+        else if (tipoMime=="text/html"){
+            if (ayuda.substring(0,10).contains("://")){
+                Uri uri = Uri.parse(ayuda);
+                Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+                startActivity(intent);
+            }
+            else{
+                WebView web = new WebView(this);
+                web.loadData(ayuda,"text/html",null);
+                web.setBackgroundColor(Color.TRANSPARENT);
+                web.setLayerType(WebView.LAYER_TYPE_SOFTWARE,null);
+                LinearLayout layout = findViewById(R.id.layout_tests);
+                layout.addView(web);
+            }
+        }
+        else if(tipoMime=="Video"){
+
+        }
+
+
     }
 
     public void onClick(View view){

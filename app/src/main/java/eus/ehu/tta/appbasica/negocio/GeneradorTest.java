@@ -16,12 +16,13 @@ public class GeneradorTest implements InterfazTest {
         Test test = new Test();
 
         test.setPregunta("¿Cual de las siguientes opciones NO se indica en el fichero de manifiesto de la app?");
-        test.setAyuda("The manifest describes the components of the aplication: the activities, services, broadcast receivers, and content providers that ...");
+        test.setAyuda("http://www.google.com");
         test.getRespuestas().add("Versión de la aplicación");
         test.getRespuestas().add("Listado de componentes de la aplicación");
         test.getRespuestas().add("Opciones del menú de ajustes");
         test.getRespuestas().add("Nivel mínimo de la API Android requerida");
         test.getRespuestas().add("Nombre del paquete java de la aplicación");
+        test.setTipoMIME("text/html");
         test.setRespuestaCorrecta(2);
 
         return test;

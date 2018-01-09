@@ -16,15 +16,25 @@ public class Test {
     private List<String> respuestas;
     private int respuestaCorrecta;
     private String ayuda;
+    private String tipoMIME;
 
     public Test(){
           this.pregunta = null;
           this.ayuda = null;
           this.respuestas = new ArrayList<>();
+          this.tipoMIME = null;
     }
 
     public String getPregunta() {
         return pregunta;
+    }
+
+    public String getTipoMIME() {
+        return tipoMIME;
+    }
+
+    public void setTipoMIME(String tipoMIME) {
+        this.tipoMIME = tipoMIME;
     }
 
     public void setPregunta(String pregunta) {
