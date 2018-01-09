@@ -25,4 +25,5 @@
     <string name="sacarFoto">Sacar foto</string>
     <string name="grabarAudio">Grabar audio</string>
     <string name="grabarVideo">Grabar video</string>
+    <string name="ayuda">Ver ayuda</string>
 </resources>

@@ -9,11 +9,14 @@ import eus.ehu.tta.appbasica.modelo.Test;
 
 public class GeneradorTest implements InterfazTest {
 
+    public GeneradorTest(){}
+
     public Test getTest(){
 
         Test test = new Test();
 
         test.setPregunta("¿Cual de las siguientes opciones NO se indica en el fichero de manifiesto de la app?");
+        test.setAyuda("The manifest describes the components of the aplication: the activities, services, broadcast receivers, and content providers that ...");
         test.getRespuestas().add("Versión de la aplicación");
         test.getRespuestas().add("Listado de componentes de la aplicación");
         test.getRespuestas().add("Opciones del menú de ajustes");

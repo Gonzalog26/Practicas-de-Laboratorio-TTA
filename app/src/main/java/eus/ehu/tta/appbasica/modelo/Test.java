@@ -1,6 +1,7 @@
 package eus.ehu.tta.appbasica.modelo;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import eus.ehu.tta.appbasica.R;
@@ -11,17 +12,16 @@ import eus.ehu.tta.appbasica.R;
 
 public class Test {
 
-    public String pregunta;
-    public List<String> respuestas;
-    public int respuestaCorrecta;
-    public String ayuda;
+    private String pregunta;
+    private List<String> respuestas;
+    private int respuestaCorrecta;
+    private String ayuda;
 
     public Test(){
           this.pregunta = null;
           this.ayuda = null;
-          this.respuestas = null;
+          this.respuestas = new ArrayList<>();
     }
-
 
     public String getPregunta() {
         return pregunta;
