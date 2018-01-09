@@ -2,20 +2,29 @@ package eus.ehu.tta.appbasica;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Layout;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
+
+import java.io.IOException;
 
 import eus.ehu.tta.appbasica.modelo.Test;
 import eus.ehu.tta.appbasica.negocio.GeneradorTest;
+import eus.ehu.tta.appbasica.presentacion.AudioPlayer;
 
 
 public class testsActivity extends AppCompatActivity implements View.OnClickListener {
@@ -75,32 +84,95 @@ public class testsActivity extends AppCompatActivity implements View.OnClickList
 
     public void verAyuda(View view){
 
-        if(tipoMime=="null"){
-            WebView web = new WebView(this);
-            web.loadData(ayuda,"text/html",null);
-            web.setBackgroundColor(Color.TRANSPARENT);
-            web.setLayerType(WebView.LAYER_TYPE_SOFTWARE,null);
-            LinearLayout layout = findViewById(R.id.layout_tests);
-            layout.addView(web);
-        }
-        else if (tipoMime=="text/html"){
-            if (ayuda.substring(0,10).contains("://")){
-                Uri uri = Uri.parse(ayuda);
-                Intent intent = new Intent(Intent.ACTION_VIEW,uri);
-                startActivity(intent);
-            }
-            else{
+
+        switch(tipoMime){
+
+            case "null":
+
                 WebView web = new WebView(this);
                 web.loadData(ayuda,"text/html",null);
                 web.setBackgroundColor(Color.TRANSPARENT);
                 web.setLayerType(WebView.LAYER_TYPE_SOFTWARE,null);
                 LinearLayout layout = findViewById(R.id.layout_tests);
                 layout.addView(web);
-            }
-        }
-        else if(tipoMime=="Video"){
+
+                break;
+
+            case "text/html":
+
+                if (ayuda.substring(0,10).contains("://")){
+                    Uri uri = Uri.parse(ayuda);
+                    Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+                    startActivity(intent);
+                }
+                else{
+                    WebView web2 = new WebView(this);
+                    web2.loadData(ayuda,"text/html",null);
+                    web2.setBackgroundColor(Color.TRANSPARENT);
+                    web2.setLayerType(WebView.LAYER_TYPE_SOFTWARE,null);
+                    LinearLayout layout1 = findViewById(R.id.layout_tests);
+                    layout1.addView(web2);
+                }
+
+                break;
+
+            case "video":
+
+                VideoView videoView = new VideoView(this);
+                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                videoView.setLayoutParams(params);
+
+                videoView.setVideoURI(Uri.parse(ayuda));
+
+                MediaController controller = new MediaController(this){
+
+                    @Override
+                    public void hide(){
+
+                    }
+
+                    public boolean dispathcKeyEvent(KeyEvent event){
+                        if(event.getKeyCode() == KeyEvent.KEYCODE_BACK)
+                            finish();
+                        return super.dispatchKeyEvent(event);
+                    }
+                };
+
+                controller.setAnchorView(videoView);
+                videoView.setMediaController(controller);
+
+                LinearLayout layout2 = findViewById(R.id.layout_tests);
+                layout2.addView(videoView);
+                videoView.start();
+
+                break;
+
+            case "audio":
+
+                View audioView;
+                audioView = new View(this);
+
+                ViewGroup.LayoutParams params2 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                audioView.setLayoutParams(params2);
+
+                audioView.setLayoutParams(params2);
+                AudioPlayer audioPlayer = new AudioPlayer(audioView, new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                });
+
+                try {
+                    audioPlayer.setAudioUri(ayuda);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                break;
 
         }
+
 
 
     }
