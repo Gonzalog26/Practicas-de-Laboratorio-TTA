@@ -140,10 +140,12 @@ public class testsActivity extends AppCompatActivity implements View.OnClickList
 
                 controller.setAnchorView(videoView);
                 videoView.setMediaController(controller);
+                videoView.start();
+
 
                 LinearLayout layout2 = findViewById(R.id.layout_tests);
                 layout2.addView(videoView);
-                videoView.start();
+
 
                 break;
 

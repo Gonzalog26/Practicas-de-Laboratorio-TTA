@@ -1,10 +1,8 @@
 package eus.ehu.tta.appbasica.modelo;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-import eus.ehu.tta.appbasica.R;
 
 /**
  * Created by tta on 27/12/17.
