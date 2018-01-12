@@ -21,6 +21,8 @@ import java.io.IOException;
 public class EjercicioActivity extends AppCompatActivity {
 
     private final int WRITE_PERMISSION_CODE = 1;
+    private final int AUDIO_REQUEST_CODE = 1;
+    private final int VIDEO_REQUEST_CODE = 2;
     private final int PICTURE_REQUEST_CODE = 3;
     private final int READ_REQUEST_CODE = 4;
 
@@ -80,11 +82,31 @@ public class EjercicioActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.noapp, Toast.LENGTH_SHORT).show();
     }
 
-    public void grabarAudio(View view){
 
+    public void grabarAudio(View view) {
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_MICROPHONE))
+            Toast.makeText(this, R.string.nomicrofono, Toast.LENGTH_SHORT).show();
+        else {
+            Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(intent, AUDIO_REQUEST_CODE);
+            } else
+                Toast.makeText(this, R.string.noapp, Toast.LENGTH_SHORT).show();
+
+        }
     }
 
-    public void grabarVideo(View view){
+    public void grabarVideo(View view) {
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA))
+            Toast.makeText(this, R.string.nocamera, Toast.LENGTH_SHORT).show();
+        else {
+            Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(intent, VIDEO_REQUEST_CODE);
+            } else
+                Toast.makeText(this, R.string.noapp, Toast.LENGTH_SHORT).show();
 
+        }
     }
+
 }

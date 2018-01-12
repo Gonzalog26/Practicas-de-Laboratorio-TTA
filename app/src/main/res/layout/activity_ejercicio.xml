@@ -24,21 +24,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/sacarFoto"
-        android:onClick="enviarFichero"/>
+        android:onClick="sacarFoto"/>
 
     <Button
         android:id="@+id/boton_grabarAudio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/grabarAudio"
-        android:onClick="enviarFichero"/>
+        android:onClick="grabarAudio"/>
 
     <Button
         android:id="@+id/boton_grabarVideo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/grabarVideo"
-        android:onClick="enviarFichero"/>
+        android:onClick="grabarVideo"/>
 
 
 </LinearLayout>
