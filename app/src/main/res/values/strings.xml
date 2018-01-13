@@ -27,6 +27,8 @@
     <string name="grabarVideo">Grabar video</string>
     <string name="ayuda">Ver ayuda</string>
     <string name="noapp">No existe ninguna aplicación para utilizar la camara</string>
+    <string name="noappgrabador">No existe ninguna aplicación para grabar audio</string>
+    <string name="noappgrabadorvideo">No existe ninguna aplicación para grabar video</string>
     <string name="nocamera">No hay camara en el dispositivo</string>
     <string name="nomicrofono">No hay microfono en el dispositivo</string>
 </resources>
