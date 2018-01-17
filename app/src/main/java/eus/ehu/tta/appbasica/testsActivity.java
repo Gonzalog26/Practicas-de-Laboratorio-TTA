@@ -20,10 +20,13 @@ import android.widget.VideoView;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import eus.ehu.tta.appbasica.modelo.Elecciones;
 import eus.ehu.tta.appbasica.modelo.Test;
 import eus.ehu.tta.appbasica.modelo.User;
+import eus.ehu.tta.appbasica.negocio.ClienteRest;
 import eus.ehu.tta.appbasica.negocio.ProgressTask;
 import eus.ehu.tta.appbasica.negocio.ServidorNegocio;
 import eus.ehu.tta.appbasica.presentacion.AudioPlayer;
@@ -31,13 +34,14 @@ import eus.ehu.tta.appbasica.presentacion.AudioPlayer;
 
 public class testsActivity extends AppCompatActivity implements View.OnClickListener {
 
-
-
     ServidorNegocio servidorNegocio = ServidorNegocio.getInstance();
 
+    List<String> mime = new ArrayList<>();
+    List<String> ayudas = new ArrayList<>();
+
     int respuestaCorrecta;
-    String tipoMime;
-    String ayuda;
+    int seleccionado;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,12 @@ public class testsActivity extends AppCompatActivity implements View.OnClickList
 
                     if(result.getElecciones().get(j).isCorrecto()==true){
                         respuestaCorrecta = j;
+                        ayudas.add("sin ayuda");
+                        mime.add("sin mime");
+                    }
+                    else{
+                        mime.add(result.getElecciones().get(j).getResourceType().getMime());
+                        ayudas.add(result.getElecciones().get(j).getAviso());
                     }
 
                 }
@@ -77,7 +87,6 @@ public class testsActivity extends AppCompatActivity implements View.OnClickList
                     radio.setText(result.getElecciones().get(i).getRespuesta());
                     radio.setOnClickListener((View.OnClickListener) context);
                     group.addView(radio);
-                    i++;
 
                 }
 
@@ -93,9 +102,10 @@ public class testsActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    public void enviarRespuesta(View view){
+    public void enviarRespuesta(View view) throws JSONException,IOException{
         RadioGroup radioGroup = findViewById(R.id.elecciones_test);
-        int seleccionado = radioGroup.getCheckedRadioButtonId();
+        seleccionado = radioGroup.getCheckedRadioButtonId();
+        seleccionado--;
 
         findViewById(R.id.boton_enviarTest).setVisibility(View.GONE);
 
@@ -103,23 +113,54 @@ public class testsActivity extends AppCompatActivity implements View.OnClickList
 
         if(seleccionado != respuestaCorrecta){
             radioGroup.getChildAt(seleccionado).setBackgroundColor(Color.RED);
-            Toast.makeText(getApplicationContext(),"!Has fallado!",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(),"!Has fallado!",Toast.LENGTH_SHORT).show();
             findViewById(R.id.boton_ayuda).setVisibility(View.VISIBLE);
         }
         else{
             Toast.makeText(getApplicationContext(), "¡Correcto!", Toast.LENGTH_SHORT).show();
         }
+
+
+        new ProgressTask<Integer>(this){
+
+            @Override
+            protected Integer work() throws IOException,JSONException {
+                return servidorNegocio.subirRespuestas(1,seleccionado+1);
+            }
+
+            @Override
+            protected void onFinish(Integer result){
+
+                if(result==200){
+                    Toast.makeText(getApplicationContext(), R.string.subidacorrecta, Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getApplicationContext(), R.string.errorsubida, Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            protected void onCancelled() {
+                super.onCancelled();
+                Toast.makeText(getApplicationContext(), R.string.errorlogeo, Toast.LENGTH_SHORT).show();
+            }
+
+        }.execute();
+
+
+
+
     }
 
     public void verAyuda(View view){
 
 
-        switch(tipoMime){
+        switch(mime.get(seleccionado)){
 
             case "null":
 
                 WebView web = new WebView(this);
-                web.loadData(ayuda,"text/html",null);
+                web.loadData(ayudas.get(seleccionado),"text/html",null);
                 web.setBackgroundColor(Color.TRANSPARENT);
                 web.setLayerType(WebView.LAYER_TYPE_SOFTWARE,null);
                 LinearLayout layout = findViewById(R.id.layout_tests);
@@ -129,14 +170,14 @@ public class testsActivity extends AppCompatActivity implements View.OnClickList
 
             case "text/html":
 
-                if (ayuda.substring(0,10).contains("://")){
-                    Uri uri = Uri.parse(ayuda);
+                if (ayudas.get(seleccionado).substring(0,10).contains("://")){
+                    Uri uri = Uri.parse(ayudas.get(seleccionado));
                     Intent intent = new Intent(Intent.ACTION_VIEW,uri);
                     startActivity(intent);
                 }
                 else{
                     WebView web2 = new WebView(this);
-                    web2.loadData(ayuda,"text/html",null);
+                    web2.loadData(ayudas.get(seleccionado),"text/html",null);
                     web2.setBackgroundColor(Color.TRANSPARENT);
                     web2.setLayerType(WebView.LAYER_TYPE_SOFTWARE,null);
                     LinearLayout layout1 = findViewById(R.id.layout_tests);
@@ -145,13 +186,13 @@ public class testsActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
 
-            case "video":
+            case "video/mp4":
 
                 VideoView videoView = new VideoView(this);
                 ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 videoView.setLayoutParams(params);
 
-                videoView.setVideoURI(Uri.parse(ayuda));
+                videoView.setVideoURI(Uri.parse(ayudas.get(seleccionado)));
 
                 MediaController controller = new MediaController(this){
 
@@ -178,7 +219,7 @@ public class testsActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
 
-            case "audio":
+            case "audio/mpeg":
 
                 View audioView;
                 audioView = new View(this);
@@ -195,7 +236,7 @@ public class testsActivity extends AppCompatActivity implements View.OnClickList
                 });
 
                 try {
-                    audioPlayer.setAudioUri(ayuda);
+                    audioPlayer.setAudioUri(ayudas.get(seleccionado));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

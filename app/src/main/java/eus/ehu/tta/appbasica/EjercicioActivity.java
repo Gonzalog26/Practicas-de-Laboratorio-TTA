@@ -15,11 +15,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 import java.io.File;
 import java.io.IOException;
+
+import eus.ehu.tta.appbasica.modelo.Ejercicio;
+import eus.ehu.tta.appbasica.modelo.Test;
+import eus.ehu.tta.appbasica.negocio.ProgressTask;
+import eus.ehu.tta.appbasica.negocio.ServidorNegocio;
 
 public class EjercicioActivity extends AppCompatActivity {
 
@@ -29,6 +38,8 @@ public class EjercicioActivity extends AppCompatActivity {
     private final int READ_REQUEST_CODE = 4;
     private final int WRITE_PERMISSION_CODE = 5;
 
+    ServidorNegocio servidorNegocio = ServidorNegocio.getInstance();
+
     Uri pictureUri;
 
     @Override
@@ -36,8 +47,30 @@ public class EjercicioActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ejercicio);
 
-        TextView textEjercicio = (TextView)findViewById(R.id.enunciado_ejercicio);
-        textEjercicio.setText(R.string.ejercicio1);
+        new ProgressTask<Ejercicio>(this){
+
+            @Override
+            protected Ejercicio work() throws IOException,JSONException {
+                return servidorNegocio.getEjercicio("12345678A","tta");
+            }
+
+            @Override
+            protected void onFinish(Ejercicio result){
+
+                TextView textEjercicio = (TextView)findViewById(R.id.enunciado_ejercicio);
+                textEjercicio.setText(result.getEnunciado());
+
+            }
+
+            @Override
+            protected void onCancelled() {
+                super.onCancelled();
+                Toast.makeText(getApplicationContext(), R.string.errorlogeo, Toast.LENGTH_SHORT).show();
+            }
+
+        }.execute();
+
+
     }
 
     public void enviarFichero(View view){

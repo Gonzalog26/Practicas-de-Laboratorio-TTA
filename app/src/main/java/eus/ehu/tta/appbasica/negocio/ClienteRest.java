@@ -105,29 +105,18 @@ public class ClienteRest {
         }
     }
 
-    public String postJson(final JSONObject json, String path) throws IOException {
-
-        HttpURLConnection conn = null;
-
+    public int postJson(final JSONObject json, String path) throws IOException{
+        HttpURLConnection connection = null;
         try {
-            String login = null;
-            conn = getConnection(path);
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            conn.setDoOutput(true);
-            PrintWriter printWriter = new PrintWriter(conn.getOutputStream());
-            printWriter.print(json.toString());
-            printWriter.close();
-            
-            if(conn.getResponseCode()==200){
-                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                login = br.readLine();
-            }
-            
-            return login;
+            connection = getConnection(path);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type","application/json; charset=UTF-8");
+            connection.setDoOutput(true);
+            PrintWriter pw = new PrintWriter(connection.getOutputStream());
+            pw.print(json.toString());
+            return connection.getResponseCode();
         } finally {
-            if (conn != null)
-                conn.disconnect();
+            disconnect(connection);
         }
     }
 

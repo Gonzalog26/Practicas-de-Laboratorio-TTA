@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import eus.ehu.tta.appbasica.modelo.Ejercicio;
 import eus.ehu.tta.appbasica.modelo.Elecciones;
 import eus.ehu.tta.appbasica.modelo.ResourceType;
 import eus.ehu.tta.appbasica.modelo.Test;
@@ -19,7 +20,7 @@ import eus.ehu.tta.appbasica.modelo.User;
 public class ServidorNegocio implements InterfazNegocio {
 
 
-    final String baseUrl = "http:u017633.ehu.eus:28080/ServidorTta/rest/tta";
+    final String baseUrl = "http://u017633.ehu.eus:28080/ServidorTta/rest/tta";
     public static ServidorNegocio servidorNegocio;
     ClienteRest clienteRest;
 
@@ -33,23 +34,6 @@ public class ServidorNegocio implements InterfazNegocio {
             servidorNegocio = new ServidorNegocio();
         return servidorNegocio;
     }
-
-    /*public Test getTest(){
-
-        Test test = new Test();
-
-        test.setPregunta("¿Cual de las siguientes opciones NO se indica en el fichero de manifiesto de la app?");
-        test.setAyuda("http://u017633.ehu.eus:28080/static/ServidorTta/AndroidManifest.mp4");
-        test.getRespuestas().add("Versión de la aplicación");
-        test.getRespuestas().add("Listado de componentes de la aplicación");
-        test.getRespuestas().add("Opciones del menú de ajustes");
-        test.getRespuestas().add("Nivel mínimo de la API Android requerida");
-        test.getRespuestas().add("Nombre del paquete java de la aplicación");
-        test.setTipoMIME("video");
-        test.setRespuestaCorrecta(2);
-
-        return test;
-    }*/
 
     public User autenticathion(String dni, String passwd) throws IOException,JSONException {
 
@@ -85,18 +69,24 @@ public class ServidorNegocio implements InterfazNegocio {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 Elecciones elecciones = new Elecciones();
                 elecciones.setId(jsonObject1.getInt("id"));
-                elecciones.setAviso(jsonObject1.getString("advise"));
+                elecciones.setAviso(jsonObject1.optString("advise","0"));
                 elecciones.setCorrecto(jsonObject1.getBoolean("correct"));
                 elecciones.setRespuesta(jsonObject1.getString("answer"));
 
-                JSONObject jsonObject2= jsonObject1.getJSONObject("resourceType");
+                if(elecciones.isCorrecto()==false){
 
-                ResourceType resourceType = new ResourceType();
-                resourceType.setId(jsonObject2.getInt("id"));
-                resourceType.setDescripcion(jsonObject2.getString("description"));
-                resourceType.setMime(jsonObject2.getString("mime"));
+                    JSONObject jsonObject2= jsonObject1.getJSONObject("resourceType");
 
-                elecciones.setResourceType(resourceType);
+                    ResourceType resourceType = new ResourceType();
+                    resourceType.setId(jsonObject2.getInt("id"));
+                    resourceType.setDescripcion(jsonObject2.getString("description"));
+                    resourceType.setMime(jsonObject2.getString("mime"));
+
+                    elecciones.setResourceType(resourceType);
+
+                }
+
+
 
                 test.getElecciones().add(elecciones);
 
@@ -109,8 +99,41 @@ public class ServidorNegocio implements InterfazNegocio {
             return null;
         }
 
+    }
 
+    public int subirRespuestas(int userId, int choiceId) throws JSONException, IOException {
 
+        JSONObject jsonObject = new JSONObject();
+        int responseCode=0;
+
+        jsonObject.put("userId",userId);
+        jsonObject.put("choiceId",choiceId);
+
+        clienteRest.setHttpBasicAuth("12345678A","tta");
+
+        responseCode = clienteRest.postJson(jsonObject,"postChoice");
+
+       return responseCode;
+
+    }
+
+    public Ejercicio getEjercicio(String dni, String passwd) throws IOException{
+
+        Ejercicio ejercicio = new Ejercicio();
+
+        clienteRest.setHttpBasicAuth(dni,passwd);
+        try{
+            JSONObject jsonObject = clienteRest.getJson("getExercise?id=1");
+
+            ejercicio.setEnunciado(jsonObject.getString("wording"));
+            ejercicio.setId(jsonObject.getInt("id"));
+
+            return ejercicio;
+
+        }
+        catch(JSONException e){
+            return null;
+        }
 
 
 

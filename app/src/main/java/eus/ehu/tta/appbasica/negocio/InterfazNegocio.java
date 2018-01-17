@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import eus.ehu.tta.appbasica.modelo.Ejercicio;
 import eus.ehu.tta.appbasica.modelo.Test;
 
 /**
@@ -13,4 +14,5 @@ import eus.ehu.tta.appbasica.modelo.Test;
 
 public interface InterfazNegocio {
     public Test getTest(String dni, String passwd) throws IOException, JSONException;
+    public Ejercicio getEjercicio(String dni, String passwd)throws  IOException;
 }
