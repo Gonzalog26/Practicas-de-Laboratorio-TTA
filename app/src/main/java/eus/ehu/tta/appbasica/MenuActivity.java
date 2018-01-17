@@ -11,7 +11,7 @@ import static eus.ehu.tta.appbasica.R.*;
 
 public class MenuActivity extends AppCompatActivity {
 
-    public static String EXTRA_LOGIN;
+    public final static String EXTRA_NOMBRE = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,8 +19,10 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(layout.activity_menu);
 
         Intent intent = getIntent();
+        intent.getStringExtra(EXTRA_NOMBRE);
+
         TextView textLogin = (TextView) findViewById(id.menu_login);
-        textLogin.setText(string.bienvenido);
+        textLogin.setText( "Bienvenido: " +EXTRA_NOMBRE);
         textLogin = (TextView)findViewById(id.leccion);
         textLogin.setText(string.leccion1);
     }

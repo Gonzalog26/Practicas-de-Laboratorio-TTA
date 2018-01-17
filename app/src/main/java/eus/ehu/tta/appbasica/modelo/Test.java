@@ -10,56 +10,27 @@ import java.util.List;
 
 public class Test {
 
-    private String pregunta;
-    private List<String> respuestas;
-    private int respuestaCorrecta;
-    private String ayuda;
-    private String tipoMIME;
+    private String enunciado;
+    private List<Elecciones> elecciones;
+
 
     public Test(){
-          this.pregunta = null;
-          this.ayuda = null;
-          this.respuestas = new ArrayList<>();
-          this.tipoMIME = null;
+          elecciones = new ArrayList<>();
     }
 
-    public String getPregunta() {
-        return pregunta;
+    public String getEnunciado() {
+        return enunciado;
     }
 
-    public String getTipoMIME() {
-        return tipoMIME;
+    public void setEnunciado(String enunciado) {
+        this.enunciado = enunciado;
     }
 
-    public void setTipoMIME(String tipoMIME) {
-        this.tipoMIME = tipoMIME;
+    public List<Elecciones> getElecciones() {
+        return elecciones;
     }
 
-    public void setPregunta(String pregunta) {
-        this.pregunta = pregunta;
-    }
-
-    public List<String> getRespuestas() {
-        return respuestas;
-    }
-
-    public void setRespuestas(List<String> respuestas) {
-        this.respuestas = respuestas;
-    }
-
-    public int getRespuestaCorrecta() {
-        return respuestaCorrecta;
-    }
-
-    public void setRespuestaCorrecta(int respuestaCorrecta) {
-        this.respuestaCorrecta = respuestaCorrecta;
-    }
-
-    public String getAyuda() {
-        return ayuda;
-    }
-
-    public void setAyuda(String ayuda) {
-        this.ayuda = ayuda;
+    public void setElecciones(List<Elecciones> elecciones) {
+        this.elecciones = elecciones;
     }
 }

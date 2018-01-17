@@ -2,12 +2,9 @@ package eus.ehu.tta.appbasica;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +17,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import org.json.JSONException;
+
 import java.io.IOException;
 
+import eus.ehu.tta.appbasica.modelo.Elecciones;
 import eus.ehu.tta.appbasica.modelo.Test;
-import eus.ehu.tta.appbasica.negocio.GeneradorTest;
+import eus.ehu.tta.appbasica.modelo.User;
+import eus.ehu.tta.appbasica.negocio.ProgressTask;
+import eus.ehu.tta.appbasica.negocio.ServidorNegocio;
 import eus.ehu.tta.appbasica.presentacion.AudioPlayer;
 
 
 public class testsActivity extends AppCompatActivity implements View.OnClickListener {
 
+
+
+    ServidorNegocio servidorNegocio = ServidorNegocio.getInstance();
 
     int respuestaCorrecta;
     String tipoMime;
@@ -39,30 +44,54 @@ public class testsActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tests);
 
-        GeneradorTest generadorTest = new GeneradorTest();
-        Test test = generadorTest.getTest();
 
-        TextView enunciado = (TextView)findViewById(R.id.enunciado_test);
-        enunciado.setText(test.getPregunta());
+        new ProgressTask<Test>(this){
 
-        respuestaCorrecta = test.getRespuestaCorrecta();
-        ayuda = test.getAyuda();
-        tipoMime = test.getTipoMIME();
+            @Override
+            protected Test work() throws IOException,JSONException {
+                return servidorNegocio.getTest("12345678A","tta");
+            }
 
-        RadioGroup group = (RadioGroup) findViewById(R.id.elecciones_test);
-        int i=0;
+            @Override
+            protected void onFinish(Test result){
 
-        for( String resp : test.getRespuestas()){
-            RadioButton radio = new RadioButton(this);
-            radio.setId(i);
-            radio.setText(resp);
-            radio.setOnClickListener(this);
-            group.addView(radio);
-            i++;
-        }
+                TextView enunciado = (TextView)findViewById(R.id.enunciado_test);
+                enunciado.setText(result.getEnunciado());
+
+                for(int j=0;j<result.getElecciones().size();j++){
+
+                    if(result.getElecciones().get(j).isCorrecto()==true){
+                        respuestaCorrecta = j;
+                    }
+
+                }
+
+                RadioGroup group = (RadioGroup) findViewById(R.id.elecciones_test);
+                int i=0;
+
+
+                for(i=0;i<result.getElecciones().size();i++){
+
+                    RadioButton radio = new RadioButton(context);
+                    radio.setId(result.getElecciones().get(i).getId());
+                    radio.setText(result.getElecciones().get(i).getRespuesta());
+                    radio.setOnClickListener((View.OnClickListener) context);
+                    group.addView(radio);
+                    i++;
+
+                }
+
+            }
+
+            @Override
+            protected void onCancelled() {
+                super.onCancelled();
+                Toast.makeText(getApplicationContext(), R.string.errorlogeo, Toast.LENGTH_SHORT).show();
+            }
+
+        }.execute();
+
     }
-
-
 
     public void enviarRespuesta(View view){
         RadioGroup radioGroup = findViewById(R.id.elecciones_test);

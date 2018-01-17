@@ -31,4 +31,6 @@
     <string name="noappgrabadorvideo">No existe ninguna aplicación para grabar video</string>
     <string name="nocamera">No hay camara en el dispositivo</string>
     <string name="nomicrofono">No hay microfono en el dispositivo</string>
+    <string name="conectando">Conectando ...</string>
+    <string name="errorlogeo">Ha ocurrido un error al logearte</string>
 </resources>
