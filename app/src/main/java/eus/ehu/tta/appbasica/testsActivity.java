@@ -34,6 +34,9 @@ import eus.ehu.tta.appbasica.presentacion.AudioPlayer;
 
 public class testsActivity extends AppCompatActivity implements View.OnClickListener {
 
+
+    public static String EXTRA_DNI;
+    public static String EXTRA_PASSWORD;
     ServidorNegocio servidorNegocio = ServidorNegocio.getInstance();
 
     List<String> mime = new ArrayList<>();
@@ -48,12 +51,17 @@ public class testsActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tests);
 
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        EXTRA_DNI = extras.getString("EXTRA_DNI");
+        EXTRA_PASSWORD = extras.getString("EXTRA_PASSWORD");
+
 
         new ProgressTask<Test>(this){
 
             @Override
             protected Test work() throws IOException,JSONException {
-                return servidorNegocio.getTest("12345678A","tta");
+                return servidorNegocio.getTest(EXTRA_DNI,EXTRA_PASSWORD);
             }
 
             @Override
@@ -125,13 +133,13 @@ public class testsActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             protected Integer work() throws IOException,JSONException {
-                return servidorNegocio.subirRespuestas(1,seleccionado+1);
+                return servidorNegocio.subirRespuestas(1,seleccionado+1,EXTRA_DNI,EXTRA_PASSWORD);
             }
 
             @Override
             protected void onFinish(Integer result){
 
-                if(result==200){
+                if(result>200 || result<300){
                     Toast.makeText(getApplicationContext(), R.string.subidacorrecta, Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(getApplicationContext(), R.string.errorsubida, Toast.LENGTH_SHORT).show();

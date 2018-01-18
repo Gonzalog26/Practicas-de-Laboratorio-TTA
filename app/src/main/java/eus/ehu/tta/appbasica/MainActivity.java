@@ -46,9 +46,13 @@ public class MainActivity extends AppCompatActivity {
             protected void onFinish(User result){
 
                 Intent intent1 = new Intent(context, MenuActivity.class);
+                Bundle extras = new Bundle();
+                extras.putString("EXTRA_DNI",login);
+                extras.putString("EXTRA_PASSWORD",passwd);
+                extras.putString("EXTRA_NOMBRE",result.getUsuario());
                 Toast.makeText(getApplicationContext(), "Bienvenido: "+result.getUsuario(), Toast.LENGTH_SHORT).show();
                 String nombre = result.getUsuario();
-                intent1.putExtra(MenuActivity.EXTRA_NOMBRE,nombre);
+                intent1.putExtras(extras);
                 startActivity(intent1);
 
 

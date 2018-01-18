@@ -45,4 +45,5 @@
         android:onClick="grabarVideo"/>
 
 
+
 </LinearLayout>

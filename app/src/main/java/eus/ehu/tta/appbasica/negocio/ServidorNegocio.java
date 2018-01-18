@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import eus.ehu.tta.appbasica.modelo.Ejercicio;
 import eus.ehu.tta.appbasica.modelo.Elecciones;
@@ -101,7 +102,7 @@ public class ServidorNegocio implements InterfazNegocio {
 
     }
 
-    public int subirRespuestas(int userId, int choiceId) throws JSONException, IOException {
+    public int subirRespuestas(int userId, int choiceId,String dni, String password) throws JSONException, IOException {
 
         JSONObject jsonObject = new JSONObject();
         int responseCode=0;
@@ -109,7 +110,7 @@ public class ServidorNegocio implements InterfazNegocio {
         jsonObject.put("userId",userId);
         jsonObject.put("choiceId",choiceId);
 
-        clienteRest.setHttpBasicAuth("12345678A","tta");
+        clienteRest.setHttpBasicAuth(dni,password);
 
         responseCode = clienteRest.postJson(jsonObject,"postChoice");
 
@@ -135,9 +136,9 @@ public class ServidorNegocio implements InterfazNegocio {
             return null;
         }
 
-
-
-
+   }
+    public int enviarFichero(String fileName, InputStream is) throws IOException {
+        return clienteRest.postFile("postExercise?user=1&id=1", is,fileName);
     }
 
 }

@@ -35,5 +35,8 @@
     <string name="errorlogeo">Ha ocurrido un error al logearte</string>
     <string name="subidacorrecta">Los resultados han sido subidos correctamente</string>
     <string name="errorsubida">Los resultados no hay sido subidos correctamente</string>
+    <string name="subirFichero">Subir Fichero</string>
+    <string name="subidaficherocorrecta">EL fichero se ha subido correctamente</string>
+    <string name="subidaficheroeerror">Ha ocurrido un error mientras se subia el fichero</string>
 
 </resources>

@@ -85,7 +85,7 @@ public class ClienteRest {
             connection = getConnection(path);
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" +
-                    "boundary");
+                    boundary);
             connection.setDoOutput(true);
             DataOutputStream out = new DataOutputStream(connection.getOutputStream());
             out.writeBytes(prefix + boundary + newLine);

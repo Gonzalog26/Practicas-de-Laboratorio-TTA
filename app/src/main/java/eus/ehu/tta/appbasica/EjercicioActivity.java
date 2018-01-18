@@ -23,7 +23,9 @@ import android.widget.Toast;
 import org.json.JSONException;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import eus.ehu.tta.appbasica.modelo.Ejercicio;
 import eus.ehu.tta.appbasica.modelo.Test;
@@ -38,6 +40,9 @@ public class EjercicioActivity extends AppCompatActivity {
     private final int READ_REQUEST_CODE = 4;
     private final int WRITE_PERMISSION_CODE = 5;
 
+    public static String EXTRA_DNI;
+    public static String EXTRA_PASSWORD;
+
     ServidorNegocio servidorNegocio = ServidorNegocio.getInstance();
 
     Uri pictureUri;
@@ -47,11 +52,16 @@ public class EjercicioActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ejercicio);
 
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        EXTRA_DNI = extras.getString("EXTRA_DNI");
+        EXTRA_PASSWORD = extras.getString("EXTRA_PASSWORD");
+
         new ProgressTask<Ejercicio>(this){
 
             @Override
             protected Ejercicio work() throws IOException,JSONException {
-                return servidorNegocio.getEjercicio("12345678A","tta");
+                return servidorNegocio.getEjercicio(EXTRA_DNI,EXTRA_PASSWORD);
             }
 
             @Override
@@ -180,21 +190,49 @@ public class EjercicioActivity extends AppCompatActivity {
         switch (requestCode) {
             case READ_REQUEST_CODE:
                 dumpMetadata(data.getData());
-                sendFile(data.getData());
+                sendFile(requestCode,data.getData());
                 break;
             case VIDEO_REQUEST_CODE:
-                sendFile(data.getData());
+                sendFile(requestCode,data.getData());
             case AUDIO_REQUEST_CODE:
-                sendFile(data.getData());
+                sendFile(requestCode,data.getData());
                 break;
             case PICTURE_REQUEST_CODE:
-                sendFile(pictureUri);
+                sendFile(requestCode,data.getData());
                 break;
         }
     }
 
-    public void sendFile(Uri uri){
-        Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show();
+    public void sendFile(final int requestCode, final Uri uri) {
+
+        new ProgressTask<Integer>(this) {
+            @Override
+            protected Integer work() throws Exception {
+                String[] strings = uri.getPath().split("/");
+                String fileName = strings[strings.length - 1];
+                InputStream is = null;
+                if (requestCode == PICTURE_REQUEST_CODE) {
+                    File file = new File(uri.getPath());
+                    is = new FileInputStream(file);
+                } else
+                    is = getContentResolver().openInputStream(uri);
+
+                return servidorNegocio.enviarFichero(fileName, is);
+            }
+
+            @Override
+            protected void onFinish(Integer result) {
+                Toast.makeText(getApplicationContext(), R.string.subidaficherocorrecta, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            protected void onCancelled() {
+                super.onCancelled();
+                Toast.makeText(getApplicationContext(), R.string.subidaficheroeerror, Toast.LENGTH_SHORT).show();
+            }
+        }.execute();
+
     }
+
 
 }
