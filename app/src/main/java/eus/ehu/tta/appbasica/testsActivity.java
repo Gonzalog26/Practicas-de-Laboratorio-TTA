@@ -139,10 +139,10 @@ public class testsActivity extends AppCompatActivity implements View.OnClickList
             @Override
             protected void onFinish(Integer result){
 
-                if(result>200 || result<300){
-                    Toast.makeText(getApplicationContext(), R.string.subidacorrecta, Toast.LENGTH_SHORT).show();
+                if(result==200){
+                    Toast.makeText(getApplicationContext(), " requestCode: "+result, Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(getApplicationContext(), R.string.errorsubida, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), " requestCode: "+result, Toast.LENGTH_SHORT).show();
                 }
 
             }

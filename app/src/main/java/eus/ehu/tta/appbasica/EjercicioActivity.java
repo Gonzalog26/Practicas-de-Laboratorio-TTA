@@ -189,8 +189,6 @@ public class EjercicioActivity extends AppCompatActivity {
 
         switch (requestCode) {
             case READ_REQUEST_CODE:
-                dumpMetadata(data.getData());
-                sendFile(requestCode,data.getData());
                 break;
             case VIDEO_REQUEST_CODE:
                 sendFile(requestCode,data.getData());
@@ -198,7 +196,7 @@ public class EjercicioActivity extends AppCompatActivity {
                 sendFile(requestCode,data.getData());
                 break;
             case PICTURE_REQUEST_CODE:
-                sendFile(requestCode,data.getData());
+                sendFile(requestCode,pictureUri);
                 break;
         }
     }
